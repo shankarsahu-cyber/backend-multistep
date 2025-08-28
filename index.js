@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const deviceRoutes = require("./routes/devices");
+const adminRoutes = require("./routes/admin");
 const errorHandler = require("./middleware/errorHandler");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
   res.status(200).json({ status: "OK", message: "Server is running" });
 });
 // Routes
+app.use("/api/admin", adminRoutes);
 app.use("/api/devices", deviceRoutes);
 
 // Health check endpoint

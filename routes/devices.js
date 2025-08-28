@@ -6,22 +6,17 @@ const {
   updateDeviceReport,
   deleteDeviceReport,
 } = require("../controllers/deviceController");
+const { protect } = require("../middleware/auth");
 
 const router = express.Router();
 
-// POST /api/devices/report - Create new device report
+// Public: Create report
 router.post("/report", createDeviceReport);
 
-// GET /api/devices/reports - Get all device reports (with pagination and filtering)
-router.get("/reports", getDeviceReports);
-
-// GET /api/devices/reports/:id - Get specific device report
-router.get("/reports/:id", getDeviceReportById);
-
-
-router.put("/reports/:id", updateDeviceReport);
-
-// DELETE /api/devices/reports/:id - Delete device report
-router.delete("/reports/:id", deleteDeviceReport);
+// Protected: Admin-only routes
+router.get("/reports", protect, getDeviceReports);
+router.get("/reports/:id", protect, getDeviceReportById);
+router.put("/reports/:id", protect, updateDeviceReport);
+router.delete("/reports/:id", protect, deleteDeviceReport);
 
 module.exports = router;
