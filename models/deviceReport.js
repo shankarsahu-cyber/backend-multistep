@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const contactInfoSchema = new mongoose.Schema(
   {
@@ -14,7 +14,10 @@ const contactInfoSchema = new mongoose.Schema(
       required: [true, "Email is required"],
       trim: true,
       lowercase: true,
-      match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, "Please enter a valid email"],
+      match: [
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+        "Please enter a valid email",
+      ],
     },
     phone: {
       type: String,
@@ -34,20 +37,29 @@ const contactInfoSchema = new mongoose.Schema(
       default: "email",
     },
   },
-  { _id: false },
-)
+  { _id: false }
+);
 
 const deviceReportSchema = new mongoose.Schema(
   {
     device: {
       type: String,
-      required: [true, "Device type is required"],
+      required: [false, "Device type is required"],
       trim: true,
       lowercase: true,
-      enum: {
-        values: ["computer", "laptop", "phone", "tablet", "printer", "monitor", "other"],
-        message: "Device must be one of: computer, laptop, phone, tablet, printer, monitor, other",
-      },
+      // enum: {
+      //   values: [
+      //     "computer",
+      //     "laptop",
+      //     "phone",
+      //     "tablet",
+      //     "printer",
+      //     "monitor",
+      //     "other",
+      //   ],
+      //   message:
+      //     "Device must be one of: computer, laptop, phone, tablet, printer, monitor, other",
+      // },
     },
     model: {
       type: String,
@@ -110,17 +122,17 @@ const deviceReportSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  },
-)
+  }
+);
 
 // Indexes for better query performance
-deviceReportSchema.index({ device: 1, location: 1 })
-deviceReportSchema.index({ status: 1 })
-deviceReportSchema.index({ createdAt: -1 })
+deviceReportSchema.index({ device: 1, location: 1 });
+deviceReportSchema.index({ status: 1 });
+deviceReportSchema.index({ createdAt: -1 });
 
 // Virtual for report age
 deviceReportSchema.virtual("reportAge").get(function () {
-  return Math.floor((Date.now() - this.createdAt) / (1000 * 60 * 60 * 24)) // days
-})
+  return Math.floor((Date.now() - this.createdAt) / (1000 * 60 * 60 * 24)); // days
+});
 
-module.exports = mongoose.model("DeviceReport", deviceReportSchema)
+module.exports = mongoose.model("DeviceReport", deviceReportSchema);
